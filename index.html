@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://ckx.be/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://ckx.be/favicon-16x16.png">
+    <title>Qui est-ce ?</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f2f6ff;
+        }
+
+        .your-picture {
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+
+        @media screen and (max-width: 700px) {
+            .your-picture {
+                flex-direction: column;
+            }
+
+            .your-picture h1 {
+                margin-right: inherit;
+            }
+        }
+
+        .your-picture h1 {
+            font-size: 60px;
+            font-family: sans-serif;
+            margin: 10px;
+            margin-right: 60px;
+        }
+
+        .your-picture .toi p {
+            font-size: 40px;
+            font-family: sans-serif;
+            margin: 10px;
+        }
+
+        .your-picture .toi {
+            display: flex;
+            align-items: center;
+        }
+
+        .pictures {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        .pictures img {
+            cursor: pointer;
+        }
+
+        .pictures img.disabled {
+            filter: brightness(0.2) opacity(1);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            text-align: center;
+            padding-bottom: 10px;
+            width: 100vw;
+            font-size: 1em;
+            background: black;
+            color: white;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            padding: 3px 8px;
+            transition: all 0.3s linear;
+        }
+
+        .footer a:hover {
+            background: rgb(169, 199, 255);
+            color: black;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="your-picture">
+        <h1>Qui est-ce&nbsp;?</h1>
+        <div class="toi">
+            <p>Toi&nbsp;:</p>
+        </div>
+    </header>
+    <main class="pictures"></main>
+    <footer class="footer">Gemaakt door <a href="https://ckx.be">CKX - Professionele websites en krachtige teksten</a>
+    </footer>
+    <script>
+        const imageTag = (src, size) => {
+            const tag = document.createElement('img');
+            tag.src = src;
+            tag.setAttribute('height', `${size}px`);
+            tag.onclick = function (e) {
+                e.target.classList.toggle('disabled');
+            }
+            return tag;
+        }
+        function toggleSelf(e) {
+            console.log('hi');
+        }
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+
+            // While there remain elements to shuffle.
+            while (currentIndex != 0) {
+
+                // Pick a remaining element.
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                // And swap it with the current element.
+                [array[currentIndex], array[randomIndex]] = [
+                    array[randomIndex], array[currentIndex]];
+            }
+
+            return array;
+        }
+
+        const pictures = shuffle([...Array(30).keys()].map(i => `images/p${i + 1}.png`));
+        document.querySelector('.toi').appendChild(imageTag(pictures[0]))
+
+
+
+        pictures.forEach((picture) => {
+            document.querySelector('.pictures').appendChild(imageTag(picture, "0"))
+        })
+
+        const resize = () => {
+            document.querySelector('.your-picture img').setAttribute('height', `200px`);
+
+            const headerHeight = document.querySelector('.your-picture').clientHeight;
+            const areaPerPicture = window.innerWidth * (window.innerHeight - headerHeight) / 30;
+            const pictureSize = Math.sqrt(areaPerPicture) * 0.90;
+
+            document.querySelectorAll('.pictures img').forEach((pictureTag) => {
+                pictureTag.setAttribute('height', `${pictureSize}px`);
+            });
+
+            document.querySelector('.your-picture img').setAttribute('height', `${1.5 * pictureSize}px`);
+        }
+
+        resize();
+        addEventListener('resize', resize);
+
+    </script>
+</body>
+
+</html>
